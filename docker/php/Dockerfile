@@ -2,6 +2,7 @@ FROM php:8.1-fpm
 
 RUN apt-get update \
     && apt-get install -y \
+        libzip-dev \
         git \
         zip \
         unzip \
@@ -30,11 +31,6 @@ COPY php.ini /usr/local/etc/php/php.ini
 COPY entrypoint.sh /etc/entrypoint.sh
 
 COPY xdebug.ini "${PHP_INI_DIR}/conf.d"
-
-RUN chmod 0644 /etc/cron.d/cron
-RUN crontab /etc/cron.d/cron
-RUN touch /var/log/cron.log
-RUN chmod 0777 /etc/cron.d/cron
 
 ENV PHP_IDE_CONFIG serverName=localhost
 
