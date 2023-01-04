@@ -1,24 +1,10 @@
 version: '3.6'
 
 services:
-  dbs:
-    image: mysql:8.0
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
-    ports:
-      - "6609:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - ./docker/mysql/init:/docker-entrypoint-initdb.d
-      - ./docker/mysql/mysql.cnf:/etc/mysql/conf.d/disable_strict_mode.cnf
-      - db-data:/var/lib/mysql
-    networks:
-      - lendflow-network
-
-  php:
-    build: ./docker/php
-    depends_on:
-      - dbs
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
     volumes:
       - .:/lendflow:delegated
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
@@ -27,14 +13,13 @@ services:
     ports:
       - "8081:3000"
     tty: true
+    environment:
+      - APP_ENV=dev
+      - APP_KEY=S043rl4v4ABY6PvkTejMejtsLIRipr2d
+      - NY_TIME_API_KEY=vBAGoaO2omVXkwchuKqNaE9kjosgpicJ
     networks:
-      - lendflow-network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-volumes:
-  db-data:
+      - lendflows-network
 
 networks:
-  lendflow-network:
+  lendflows-network:
     driver: bridge
