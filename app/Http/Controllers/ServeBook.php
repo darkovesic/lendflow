@@ -12,10 +12,10 @@ class ServeBook extends Controller
 {
     use ValidatesRequests;
 
-    public function __invoke(BooksRequest $request): Response
+    public function __invoke(BooksRequest $request, NyTimeAPI $api): Response
     {
         return response(
-            (new NyTimeAPI())($request->validated()),
+            $api($request->validated()),
             Response::HTTP_OK
         );
     }
