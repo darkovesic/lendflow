@@ -13,24 +13,14 @@ to http://localhost:8081.
 
 ## Installation
 
-Regardless of the environment setup method, there are some common steps to be performed:
+Setup should be done automatically when containers are up. If for any reason setup wasn't done properly, you should manually run some commands
+1. `$ docker exec -it lendflow_app_1 bash`
+2. `$ composer install`
+3. `$ chmod -R 777 storage`
+4. `$ chmod 777 bootstrap/cache`
+5. `$ php artisan config:cache && php artisan config:clear && php artisan cache:clear`
 
-1. `$ composer install`
-1. `$ composer db:migrations:run`
-
-## Using the mysql server from host (localhost)
-
-*You will need a mysql client, be it console one or GUI like SequelPro.
-
-```
-mysql -u root -p root -h 127.0.0.1 -P 6620
-```
 
 ## Using different hostname(s)
 
 Nginx will respond to any hostname, adding values to `/etc/hosts` will work just like with brew variety.
-
-## PHPStorm xdebug integration
-
-Detailed setup can be found on this url: https://dev.to/brpaz/docker-phpstorm-and-xdebug-the-definitive-guide-14og
-Bare in mind that we used 9003 port 
