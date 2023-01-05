@@ -14,6 +14,10 @@ class NyTimeAPI
             $params['isbn'] = implode(';', $params['isbn']);
         }
 
+        if (isset($params['offset'])) {
+            $params['offset'] = $params['offset'] > 0 ? $params['offset'] * 20 : 0;
+        }
+
         $httpQuery = http_build_query($params + ['api-key' => config('api.nyTimeApiKey')]);
 
         return Http::get(sprintf('%s?%s', self::API_URL, $httpQuery))->throw()->json();

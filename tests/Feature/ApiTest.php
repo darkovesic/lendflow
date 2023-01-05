@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Services\NyTimeAPI;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class ApiTest extends TestCase
@@ -42,6 +44,18 @@ class ApiTest extends TestCase
 
     public function test_endpoint_will_make_succesfull_call()
     {
+        $this->instance(
+            NyTimeAPI::class,
+            \Mockery::mock(NyTimeAPI::class, static function (MockInterface $mock) {
+                $mock
+                    ->shouldReceive('__invoke')
+                    ->once()
+                    ->andReturn([
+                        'status' => 'OK'
+                    ]);
+            })
+        );
+
         $response = $this->get('/api/1/nyt/best-sellers?author=test&isbn[]=9780446579933');
         $response
             ->assertStatus(200)
