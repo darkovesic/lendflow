@@ -7,6 +7,9 @@ services:
       dockerfile: ./docker/php/Dockerfile
     volumes:
       - .:/lendflow:delegated
+      - /lendflow/vendor
+      - /lendflow/storage
+      - /lendflow/bootstrap/cache
       - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
       - ./docker/php/site.conf:/etc/nginx/conf.d/default.conf

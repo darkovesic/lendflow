@@ -25,14 +25,14 @@ COPY ./docker/php/entrypoint.sh /etc/entrypoint.sh
 
 WORKDIR /lendflow
 COPY . /lendflow
+
+
+RUN composer install
+RUN chmod -R 777 storage
+RUN chmod 777 bootstrap/cache
+
 EXPOSE 9000 9003
 
 ENTRYPOINT ["sh", "/etc/entrypoint.sh"]
 
-RUN chmod -R 777 storage
-RUN chmod -R 777 vendor
-RUN composer install
-RUN ls -la vendor
-RUN touch ./storage/logs/laravel.log
-
-RUN php artisan key:generate
+RUN php artisan config:cache && php artisan config:clear && php artisan cache:clear
