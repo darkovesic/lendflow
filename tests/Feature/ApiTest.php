@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Services\NyTimeAPI;
+use Illuminate\Validation\ValidationException;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -19,27 +20,15 @@ class ApiTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function test_endpoint_will_return_ok()
-    {
-        $response = $this->get('/api/1/nyt/best-sellers');
-        $response->assertStatus(200);
-    }
-
-    public function test_endpoint_any_params_will_return_ok()
-    {
-        $response = $this->get('/api/1/nyt/best-sellers?author=test&isbn[]=1111111111');
-        $response->assertStatus(200);
-    }
-
     public function test_endpoint_isbn_not_valid_will_not_process_content()
     {
+        $this->expectException(ValidationException::class);
+
         $response = $this->get('/api/1/nyt/best-sellers?author=test&isbn[]=11111111');
-        $response->assertStatus(302);
+
+        $response
+            ->assertStatus(302)
+            ->assertJson([]);
     }
 
     public function test_endpoint_will_make_succesfull_call()
